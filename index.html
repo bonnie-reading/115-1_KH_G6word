@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>六上國語形近字與部件看寫特攻隊 (第1-12課)</title>
+  <style>
+    :root {
+      --primary: #4F46E5;
+      --primary-light: #EEF2FF;
+      --accent: #F59E0B;
+      --accent-light: #FEF3C7;
+      --success: #10B981;
+      --error: #EF4444;
+      --bg: #F8FAFC;
+      --card-bg: #FFFFFF;
+      --text-main: #1E293B;
+      --text-muted: #64748B;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang TC", "Microsoft JhengHei", sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 16px;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 740px;
+      background: var(--card-bg);
+      border-radius: 24px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* 頂部遊戲化狀態列 */
+    .game-statusbar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      background: #F8FAFC;
+      border: 1px solid #E2E8F0;
+      padding: 10px 16px;
+      border-radius: 16px;
+      gap: 10px;
+    }
+
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badge-rank {
+      background: linear-gradient(135deg, #6366F1, #8B5CF6);
+      color: white;
+      font-size: 0.85rem;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 9999px;
+    }
+
+    .exp-bar-box {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .exp-track {
+      width: 80px;
+      height: 8px;
+      background: #CBD5E1;
+      border-radius: 9999px;
+      overflow: hidden;
+    }
+
+    .exp-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--accent);
+      transition: width 0.3s;
+    }
+
+    .header-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .controls-left {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    select {
+      background: var(--primary-light);
+      color: var(--primary);
+      border: 2px solid transparent;
+      padding: 8px 12px;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .mode-toggle {
+      display: flex;
+      background: #E2E8F0;
+      border-radius: 12px;
+      padding: 3px;
+    }
+
+    .mode-btn {
+      border: none;
+      padding: 6px 12px;
+      border-radius: 9px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      background: transparent;
+      color: var(--text-muted);
+      transition: all 0.2s;
+    }
+
+    .mode-btn.active {
+      background: #FFFFFF;
+      color: var(--primary);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 9999px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      background: #F1F5F9;
+      color: var(--text-muted);
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      background: #E2E8F0;
+      border-radius: 9999px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #6366F1, #8B5CF6);
+      transition: width 0.3s ease;
+    }
+
+    .card-question {
+      background: linear-gradient(180deg, #F8FAFC 0%, #F1F5F9 100%);
+      border: 2px solid #E2E8F0;
+      border-radius: 20px;
+      padding: 20px 16px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .phrase-display {
+      font-size: 2.8rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-height: 65px;
+    }
+
+    .target-zhuyin-box {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #FFFFFF;
+      border: 3px dashed var(--primary);
+      color: var(--primary);
+      border-radius: 14px;
+      padding: 2px 14px;
+      font-size: 2rem;
+      min-width: 80px;
+      box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.1);
+    }
+
+    .action-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-audio {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #FFFFFF;
+      border: 2px solid #CBD5E1;
+      padding: 8px 16px;
+      border-radius: 9999px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-main);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-audio:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .btn-hint-toggle {
+      background: transparent;
+      border: none;
+      color: #D97706;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 6px 12px;
+      border-radius: 8px;
+    }
+
+    .btn-hint-toggle:hover {
+      background: var(--accent-light);
+    }
+
+    .hint-container {
+      display: none;
+      width: 100%;
+      background: var(--accent-light);
+      border-left: 4px solid var(--accent);
+      padding: 12px 16px;
+      border-radius: 8px;
+      text-align: left;
+      font-size: 0.92rem;
+      color: #92400E;
+      line-height: 1.5;
+    }
+
+    .hint-audio-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 8px;
+      padding: 4px 10px;
+      background: #FFFFFF;
+      border: 1px solid #D97706;
+      border-radius: 6px;
+      color: #92400E;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* 模式一：形近字選項 */
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 8px;
+    }
+
+    .btn-opt {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #FFFFFF;
+      border: 3px solid #E2E8F0;
+      border-radius: 20px;
+      font-size: 3.2rem;
+      font-weight: 800;
+      cursor: pointer;
+      padding: 18px;
+      transition: all 0.2s;
+      user-select: none;
+    }
+
+    .btn-opt:hover:not(:disabled) {
+      border-color: var(--primary);
+      background: var(--primary-light);
+      transform: translateY(-3px);
+    }
+
+    .btn-opt.correct {
+      background: #ECFDF5 !important;
+      border-color: var(--success) !important;
+      color: #065F46 !important;
+    }
+
+    .btn-opt.wrong {
+      background: #FEF2F2 !important;
+      border-color: var(--error) !important;
+      color: #991B1B !important;
+      animation: shake 0.4s ease-in-out;
+    }
+
+    /* 模式二：遮部件寫字關卡 */
+    .masked-write-container {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      margin-top: 8px;
+    }
+
+    .masked-display-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background: #FFF;
+      border: 2px dashed #CBD5E1;
+      padding: 12px 20px;
+      border-radius: 16px;
+      width: 100%;
+    }
+
+    .masked-char-box {
+      font-size: 3.5rem;
+      font-weight: 900;
+      letter-spacing: 6px;
+      color: #1E293B;
+    }
+
+    .sos-panel {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      background: #F1F5F9;
+      padding: 10px;
+      border-radius: 12px;
+    }
+
+    .btn-sos {
+      background: #FFFFFF;
+      border: 1px solid #CBD5E1;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #475569;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s;
+    }
+
+    .btn-sos:hover {
+      background: #FEF3C7;
+      border-color: #D97706;
+      color: #92400E;
+    }
+
+    .sos-message {
+      display: none;
+      width: 100%;
+      font-size: 0.9rem;
+      color: #0369A1;
+      background: #E0F2FE;
+      padding: 8px 12px;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .canvas-wrapper {
+      position: relative;
+      border: 2px solid #CBD5E1;
+      border-radius: 16px;
+      background: #FFFFFF;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.03);
+    }
+
+    .watermark-guide {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 8.5rem;
+      font-weight: 900;
+      color: rgba(79, 70, 229, 0.18);
+      pointer-events: none;
+      user-select: none;
+      display: none;
+    }
+
+    .canvas-grid-line {
+      position: absolute;
+      pointer-events: none;
+    }
+    .canvas-grid-h {
+      top: 50%; left: 0; right: 0;
+      border-top: 1px dashed #E2E8F0;
+    }
+    .canvas-grid-v {
+      left: 50%; top: 0; bottom: 0;
+      border-left: 1px dashed #E2E8F0;
+    }
+
+    canvas {
+      display: block;
+      border-radius: 14px;
+      cursor: crosshair;
+      touch-action: none;
+    }
+
+    .canvas-tools {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .btn-tool {
+      background: #F1F5F9;
+      border: 1px solid #CBD5E1;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn-self-check {
+      background: #10B981;
+      color: white;
+      border: none;
+    }
+
+    .btn-self-check:hover {
+      background: #059669;
+    }
+
+    /* 雙向檢核對照區 */
+    .reveal-box {
+      display: none;
+      font-size: 1.1rem;
+      background: #FFFFFF;
+      border: 2px solid #CBD5E1;
+      border-radius: 16px;
+      padding: 16px;
+      text-align: center;
+      width: 100%;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+
+    .feedback-box {
+      display: none;
+      border-radius: 14px;
+      padding: 12px 16px;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .feedback-box.correct {
+      background: #ECFDF5;
+      color: #065F46;
+      border: 1px solid #A7F3D0;
+    }
+
+    .feedback-box.wrong {
+      background: #FEF2F2;
+      color: #991B1B;
+      border: 1px solid #FECACA;
+    }
+
+    .btn-next {
+      display: none;
+      width: 100%;
+      background: var(--primary);
+      color: #FFFFFF;
+      border: none;
+      padding: 14px;
+      border-radius: 14px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(79, 70, 229, 0.2);
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-container">
+  <!-- 頂部遊戲化狀態列 -->
+  <div class="game-statusbar">
+    <div class="user-profile">
+      <span>🎒</span>
+      <span class="badge-rank" id="userRankBadge">Lv.1 生字見習生</span>
+    </div>
+    <div class="exp-bar-box">
+      <span>經驗值</span>
+      <div class="exp-track">
+        <div class="exp-fill" id="expFill"></div>
+      </div>
+      <span id="expText">0/100</span>
+    </div>
+    <div class="badge" id="scoreDisplay">第 1 題</div>
+  </div>
+
+  <!-- 課次與模式選擇 -->
+  <div class="header-bar">
+    <div class="controls-left">
+      <select id="lessonSelect" onchange="changeLesson(this.value)"></select>
+      
+      <div class="mode-toggle">
+        <button class="mode-btn active" id="modeChoiceBtn" onclick="switchMode('choice')">辨析選字</button>
+        <button class="mode-btn" id="modeWriteBtn" onclick="switchMode('write')">遮部件看寫 ✍</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="progress-track">
+    <div class="progress-fill" id="progressBar"></div>
+  </div>
+
+  <div id="quizContainer">
+    <div class="card-question">
+      <div class="phrase-display" id="phraseDisplay"></div>
+      
+      <div class="action-row">
+        <button class="btn-audio" onclick="speakCurrentWord()">
+          🔊 語音報讀
+        </button>
+        <button class="btn-hint-toggle" onclick="toggleHint()">
+          💡 部件口訣提示
+        </button>
+      </div>
+
+      <div class="hint-container" id="hintBox">
+        <div id="hintContent"></div>
+        <button class="hint-audio-btn" onclick="speakHintMnemonic()">
+          🔊 聽口訣念法
+        </button>
+      </div>
+    </div>
+
+    <!-- 模式一：形近字選項 -->
+    <div class="options-grid" id="optionsGrid"></div>
+
+    <!-- 模式二：遮部件寫字關卡 + 三階求救機制 -->
+    <div class="masked-write-container" id="maskedWriteContainer">
+      <div class="masked-display-card">
+        <span style="font-size: 0.9rem; color: var(--text-muted); font-weight: 700;">看殘餘部件，寫出完整生字：</span>
+        <div class="masked-char-box" id="maskedCharDisplay">⬛＋由</div>
+      </div>
+
+      <!-- 三階求救工具列 -->
+      <div class="sos-panel">
+        <button class="btn-sos" onclick="triggerSOS(1)">🆘 求救 1：結構線索</button>
+        <button class="btn-sos" onclick="triggerSOS(2)">✨ 求救 2：淡灰描紅</button>
+        <button class="btn-sos" onclick="triggerSOS(3)">👀 求救 3：揭曉正解</button>
+        <div class="sos-message" id="sosMessage"></div>
+      </div>
+
+      <!-- 手寫畫布 -->
+      <div class="canvas-wrapper">
+        <div class="watermark-guide" id="watermarkGuide">軸</div>
+        <div class="canvas-grid-line canvas-grid-h"></div>
+        <div class="canvas-grid-line canvas-grid-v"></div>
+        <canvas id="writeCanvas" width="220" height="220"></canvas>
+      </div>
+
+      <div class="canvas-tools">
+        <button class="btn-tool" onclick="clearCanvas()">🧹 清除重寫</button>
+        <button class="btn-tool btn-self-check" onclick="confirmWriteSuccess()">✅ 我寫好了！對答案</button>
+      </div>
+
+      <!-- 自我檢核對照區塊 -->
+      <div class="reveal-box" id="revealBox"></div>
+    </div>
+
+    <!-- 即時反饋 -->
+    <div class="feedback-box" id="feedbackBox" style="margin-top: 14px;"></div>
+    <button class="btn-next" id="nextBtn" onclick="nextQuestion()" style="margin-top: 14px;">
+      下一題 ➜
+    </button>
+  </div>
+</div>
+
+<script>
+// 國語六上（第1-12課）完整題庫資料庫
+const lessonsData = {
+  1: {
+    title: "第 1 課《跑道》",
+    questions: [
+      { pre: "壓", target: "軸", post: "", zhuyin: "ㄓㄡˊ", speechWord: "壓軸", speechTarget: "軸", masked: "車＋⬛", options: ["軸", "抽"], diff: "車（車部） vs 扌（手部）", memo: "車輛中心輪為軸，伸手出來往外抽。" },
+      { pre: "搶", target: "奪", post: "", zhuyin: "ㄉㄨㄛˊ", masked: "大＋⬛＋寸", options: ["奪", "奮"], diff: "隹（短尾鳥） vs 田（田部）", memo: "手抓飛鳥用力奪，田地奔走要奮發。" },
+      { pre: "委", target: "屈", post: "", zhuyin: "ㄑㄩ", masked: "尸＋⬛", options: ["屈", "曲"], diff: "尸＋出 vs 純曲字", memo: "身體受壓感到屈，彎彎轉轉成歌曲。" },
+      { pre: "", target: "偏", post: "心", zhuyin: "ㄆㄧㄢ", masked: "⬛＋扁", options: ["偏", "篇"], diff: "亻（單人旁） vs 竹（竹頭）", memo: "人心不公叫偏心，竹簡成冊是一篇。" },
+      { pre: "", target: "搬", post: "運", zhuyin: "ㄅㄢ", masked: "⬛＋般", options: ["搬", "般"], diff: "扌（手部） vs 無手旁", memo: "動手用力把家搬，一般樣貌本無手。" },
+      { pre: "", target: "芥", post: "蒂", zhuyin: "ㄐㄧㄝˋ", masked: "⬛／介", options: ["芥", "茶"], diff: "艹＋介 vs 艹＋人＋木", memo: "小草微塵芥菜芥，樹上採下烏龍茶。" },
+      { pre: "芥", target: "蒂", post: "", zhuyin: "ㄉㄧˋ", masked: "⬛／帝", options: ["蒂", "啼"], diff: "艹（草頭） vs 口（口部）", memo: "花草瓜果結蒂頭，張口啼哭淚汪汪。" },
+      { pre: "壓", target: "抑", post: "", zhuyin: "ㄧˋ", masked: "⬛＋卬", options: ["抑", "仰"], diff: "扌（手部） vs 亻（單人旁）", memo: "伸手下壓叫壓抑，人抬頭望是仰望。" },
+      { pre: "", target: "拒", post: "絕", zhuyin: "ㄐㄩˋ", masked: "⬛＋巨", options: ["拒", "距"], diff: "扌（手部） vs 足（足部）", memo: "伸手推開是拒絕，腳步拉開成距離。" },
+      { pre: "", target: "尷", post: "尬", zhuyin: "ㄍㄢ", masked: "尢＋⬛", options: ["尷", "監"], diff: "尢（瘸足）＋監 vs 純監", memo: "行步難堪真尷尬，居高俯察是監工。" },
+      { pre: "尷", target: "尬", post: "", zhuyin: "ㄍㄚˋ", masked: "尢＋⬛", options: ["尬", "介"], diff: "尢（瘸足）＋介 vs 純介", memo: "尷尬難行跛足尬，介紹中間單一人。" },
+      { pre: "後", target: "悔", post: "", zhuyin: "ㄏㄨㄟˇ", masked: "⬛＋每", options: ["悔", "侮"], diff: "忄（心部） vs 亻（單人旁）", memo: "心中慚愧叫後悔，他人欺負是侮慢。" },
+      { pre: "", target: "拱", post: "手讓人", zhuyin: "ㄍㄨㄥˇ", masked: "⬛＋共", options: ["拱", "洪"], diff: "扌（手部） vs 氵（水部）", memo: "雙手相抱拱手讓，大水氾濫成洪流。" },
+      { pre: "", target: "距", post: "離", zhuyin: "ㄐㄩˋ", masked: "⬛＋巨", options: ["距", "拒"], diff: "足（足部） vs 扌（手部）", memo: "腳下空間是距離，伸手推擋是抗拒。" },
+      { pre: "", target: "默", post: "默默", zhuyin: "ㄇㄛˋ", masked: "黑＋⬛", options: ["默", "黑"], diff: "犬（犬部） vs 純黑字", memo: "黑犬無聲名為默，純粹漆黑單寫黑。" },
+      { pre: "", target: "鬥", post: "志", zhuyin: "ㄉㄡˋ", masked: "鬥 (二士相向)", options: ["鬥", "豆"], diff: "鬥（鬥部） vs 豆（豆部）", memo: "雙士相爭昂揚鬥，盤中吃的是大豆。" },
+      { pre: "", target: "扭", post: "曲", zhuyin: "ㄋㄧㄡˇ", masked: "⬛＋丑", options: ["扭", "紐"], diff: "扌（手部） vs 糹（絞絲）", memo: "動手扭轉會扭曲，繩線打結成紐扣。" },
+      { pre: "", target: "猛", post: "然", zhuyin: "ㄇㄥˇ", masked: "⬛＋孟", options: ["猛", "孟"], diff: "犭（犬部） vs 子（子部）", memo: "野犬突襲真兇猛，孔孟先賢好孟子。" },
+      { pre: "", target: "愣", post: "住", zhuyin: "ㄌㄥˋ", masked: "⬛＋楞", options: ["愣", "楞"], diff: "忄（心部） vs 木（木部）", memo: "心神發呆叫發愣，木頭邊角是稜楞。" }
+    ]
+  },
+  2: {
+    title: "第 2 課《朱子治家格言選》",
+    questions: [
+      { pre: "稀", target: "粥", post: "", zhuyin: "ㄓㄡ", masked: "弓＋米＋⬛", options: ["粥", "州"], diff: "雙弓夾米 vs 三川", memo: "雙弓煮米成稀粥，河川水渚是神州。" },
+      { pre: "半絲半", target: "縷", post: "", zhuyin: "ㄌㄩˇ", masked: "⬛＋婁", options: ["縷", "樓"], diff: "糹（絞絲） vs 木（木部）", memo: "一絲一線細千縷，木建高閣成大樓。" },
+      { pre: "飯", target: "碗", post: "", zhuyin: "ㄨㄢˇ", masked: "⬛＋宛", options: ["碗", "婉"], diff: "石（石部） vs 女（女部）", memo: "泥石燒成就飯碗，女子溫柔真婉約。" },
+      { pre: "未雨", target: "綢", post: "繆", zhuyin: "ㄔㄡˊ", masked: "⬛＋周", options: ["綢", "稠"], diff: "糹（絞絲） vs 禾（禾部）", memo: "絲繩纏固是綢繆，稻穀茂密真濃稠。" },
+      { pre: "未雨綢", target: "繆", post: "", zhuyin: "ㄇㄡˊ", masked: "⬛＋翏", options: ["繆", "膠"], diff: "糹（絞絲） vs 月（肉部）", memo: "絲線纏補綢繆緊，魚皮熬成萬能膠。" },
+      { pre: "", target: "毋", post: "庸", zhuyin: "ㄨˊ", masked: "毋 (中無兩點)", options: ["毋", "母"], diff: "貫穿一橫 vs 兩點哺乳", memo: "毋庸質疑貫穿橫，慈愛母親兩點乳。" },
+      { pre: "", target: "掘", post: "井", zhuyin: "ㄐㄩㄝˊ", masked: "⬛＋屈", options: ["掘", "屈"], diff: "扌（手部） vs 尸（尸部）", memo: "動手挖地去掘井，受人冤枉直喊屈。" },
+      { pre: "纏", target: "縛", post: "", zhuyin: "ㄈㄨˊ", masked: "⬛＋專", options: ["縛", "博"], diff: "糹（絞絲） vs 十（十部）", memo: "用繩緊捆叫束縛，學問廣大多淵博。" },
+      { pre: "", target: "瓦", post: "缶", zhuyin: "ㄨㄚˇ", masked: "瓦", options: ["瓦", "互"], diff: "瓦器部 vs 交互部", memo: "屋頂遮雨紅陶瓦，彼此往來互相助。" },
+      { pre: "瓦", target: "缶", post: "", zhuyin: "ㄈㄡˇ", masked: "缶", options: ["缶", "擊"], diff: "純缶 vs 擊打殳部", memo: "土製瓦器名為缶，持杖用力打出擊。" },
+      { pre: "園", target: "蔬", post: "", zhuyin: "ㄕㄨ", masked: "⬛／疏", options: ["蔬", "疏"], diff: "艹（草頭） vs 疋（疋部）", memo: "地裡長出綠蔬菜，相距漸遠是疏遠。" },
+      { pre: "珍", target: "饈", post: "", zhuyin: "ㄒㄧㄡ", masked: "⬛＋羞", options: ["饈", "修"], diff: "飠（食部） vs 亻（單人旁）", memo: "盤中美食珍饈味，修身養性自己修。" },
+      { pre: "腹", target: "蛇", post: "", zhuyin: "ㄕㄜˊ", masked: "⬛＋它", options: ["蛇", "牠"], diff: "虫（虫部） vs 牛（牛部）", memo: "地上爬行毒青蛇，動物代表牠們牠。" },
+      { pre: "", target: "陶", post: "冶", zhuyin: "ㄊㄠˊ", masked: "⬛＋匋", options: ["陶", "淘"], diff: "阝（左阜） vs 氵（水部）", memo: "土山燒瓦成陶器，水裡掏洗把沙淘。" },
+      { pre: "", target: "施", post: "惠", zhuyin: "ㄕ", masked: "方＋⬛", options: ["施", "拖"], diff: "也（行進） vs 扌（手部）", memo: "給予恩澤名施惠，動手拉扯叫做拖。" },
+      { pre: "切", target: "勿", post: "", zhuyin: "ㄨˋ", masked: "勿", options: ["勿", "勻"], diff: "雙撇 vs 一點兩包", memo: "萬萬不可切勿犯，分配平衡真均勻。" },
+      { pre: "", target: "預", post: "防", zhuyin: "ㄩˋ", masked: "予＋⬛", options: ["預", "頂"], diff: "予＋頁 vs 丁＋頁", memo: "事先準備先預防，頭上頂峰是一頂。" },
+      { pre: "", target: "悲", post: "傷", zhuyin: "ㄅㄟ", masked: "非＋⬛", options: ["悲", "非"], diff: "心（心底） vs 純非字", memo: "心中非願感悲傷，顛倒黑白莫作非。" }
+    ]
+  },
+  3: {
+    title: "第 3 課《談遇見更好的自己》",
+    questions: [
+      { pre: "", target: "卓", post: "越", zhuyin: "ㄓㄨㄛˊ", masked: "卜＋⬛", options: ["卓", "桌"], diff: "早（早部） vs 木（木部）", memo: "超越眾人成卓越，木製家具是書桌。" },
+      { pre: "", target: "培", post: "養", zhuyin: "ㄆㄟˊ", masked: "⬛＋咅", options: ["培", "陪"], diff: "土（土部） vs 阝（左耳）", memo: "加土灌溉叫培養，人行相隨是陪伴。" },
+      { pre: "別出心", target: "裁", post: "", zhuyin: "ㄘㄞˊ", masked: "𢦏＋⬛", options: ["裁", "栽"], diff: "衣（衣部） vs 木（木部）", memo: "剪裁衣服心裁出，種植樹木是栽培。" },
+      { pre: "", target: "瑣", post: "事", zhuyin: "ㄙㄨㄛˇ", masked: "⬛＋𧴪", options: ["瑣", "鎖"], diff: "王（玉部） vs 金（金屬）", memo: "碎玉零細成瑣事，鐵環閉門名鐵鎖。" },
+      { pre: "", target: "伯", post: "仲", zhuyin: "ㄅㄛˊ", masked: "⬛＋白", options: ["伯", "怕"], diff: "亻（單人旁） vs 忄（心部）", memo: "長兄家中稱大伯，心裡恐慌直害怕。" },
+      { pre: "伯", target: "仲", post: "", zhuyin: "ㄓㄨㄥˋ", masked: "⬛＋中", options: ["仲", "種"], diff: "亻（單人旁） vs 禾（禾部）", memo: "排行居中伯仲弟，播灑禾苗叫種植。" },
+      { pre: "", target: "耕", post: "耘", zhuyin: "ㄍㄥ", masked: "耒＋⬛", options: ["耕", "井"], diff: "耒＋井 vs 純井字", memo: "拿耒翻土去耕作，圍地方正名水井。" },
+      { pre: "", target: "賺", post: "取", zhuyin: "ㄓㄨㄢˋ", masked: "⬛＋兼", options: ["賺", "嫌"], diff: "貝（財寶） vs 女（女部）", memo: "買賣得財名賺取，心生討厭是嫌棄。" },
+      { pre: "", target: "異", post: "口同聲", zhuyin: "ㄧˋ", masked: "田＋⬛", options: ["異", "導"], diff: "共（分開） vs 寸（寸部）", memo: "想法不同名相異，帶領方向叫引導。" },
+      { pre: "", target: "惋", post: "惜", zhuyin: "ㄨㄢˇ", masked: "⬛＋宛", options: ["惋", "婉"], diff: "忄（心部） vs 女（女部）", memo: "心中遺憾深惋惜，溫和美好真婉轉。" },
+      { pre: "", target: "欠", post: "缺", zhuyin: "ㄑㄧㄢˋ", masked: "欠", options: ["欠", "吹"], diff: "張口呼吸 vs 口＋欠", memo: "空虛不足叫欠缺，張口呼氣把風吹。" },
+      { pre: "", target: "砥", post: "礪", zhuyin: "ㄉㄧˇ", masked: "⬛＋氐", options: ["砥", "底"], diff: "石（石部） vs 广（廣字頭）", memo: "細磨刀石名砥石，房屋最下是根底。" },
+      { pre: "砥", target: "礪", post: "", zhuyin: "ㄌㄧˋ", masked: "⬛＋厲", options: ["礪", "厲"], diff: "石（石部） vs 厂（厂部）", memo: "粗磨石研砥礪深，言詞嚴格真嚴厲。" },
+      { pre: "", target: "驕", post: "傲", zhuyin: "ㄐㄧㄠ", masked: "⬛＋喬", options: ["驕", "橋"], diff: "馬（馬部） vs 木（木部）", memo: "高頭大馬驕傲起，跨水通行木做橋。" },
+      { pre: "驕", target: "傲", post: "", zhuyin: "ㄠˋ", masked: "⬛＋敖", options: ["傲", "熬"], diff: "亻（單人旁） vs 灬（火部）", memo: "自大看人神情傲，鍋下燒火苦苦熬。" },
+      { pre: "耕", target: "耘", post: "", zhuyin: "ㄩㄣˊ", masked: "耒＋⬛", options: ["耘", "運"], diff: "耒＋云 vs 辶＋軍", memo: "農人除草勤耕耘，車行千里走大運。" },
+      { pre: "", target: "隔", post: "靴搔癢", zhuyin: "ㄍㄜˊ", masked: "⬛＋鬲", options: ["隔", "融"], diff: "阝（左耳） vs 虫（虫部）", memo: "築牆阻斷名隔絕，蟲在鍋融冰化融。" },
+      { pre: "", target: "茁", post: "壯", zhuyin: "ㄓㄨㄛˊ", masked: "⬛／出", options: ["茁", "出"], diff: "艹（草頭） vs 雙山疊出", memo: "幼苗破土茁壯長，邁步出門看世界。" }
+    ]
+  },
+  4: {
+    title: "第 4 課《臺灣美食詩選》",
+    questions: [
+      { pre: "一言九", target: "鼎", post: "", zhuyin: "ㄉㄧㄥˇ", masked: "鼎", options: ["鼎", "頂"], diff: "鼎身三足 vs 頁（頁部）", memo: "青銅重器一言鼎，頭殼最上是屋頂。" },
+      { pre: "", target: "颳", post: "風", zhuyin: "ㄍㄨㄚ", masked: "舌＋⬛", options: ["颳", "刮"], diff: "風（風部） vs 刂（刀部）", memo: "大風呼呼颳大風，拿刀除垢叫做刮。" },
+      { pre: "", target: "廚", post: "房", zhuyin: "ㄔㄨˊ", masked: "广＋⬛", options: ["廚", "櫥"], diff: "广（廣字頭） vs 木（木部）", memo: "烹調料理大廚房，木做櫃子名衣櫥。" },
+      { pre: "", target: "淋", post: "濕", zhuyin: "ㄌㄧㄣˊ", masked: "⬛＋林", options: ["淋", "林"], diff: "氵（水部） vs 純雙木", memo: "大雨澆身全淋濕，雙木並立是森林。" },
+      { pre: "", target: "晒", post: "乾", zhuyin: "ㄕㄞˋ", masked: "⬛＋西", options: ["晒", "西"], diff: "日（日頭） vs 無日頭", memo: "太陽高掛拿來晒，太陽落下方位西。" },
+      { pre: "竹", target: "筍", post: "", zhuyin: "ㄙㄨㄣˇ", masked: "⬛／旬", options: ["筍", "荀"], diff: "竹（竹頭） vs 艹（草頭）", memo: "竹筍破土竹字頭，草木荀姓是草頭。" },
+      { pre: "目不識", target: "丁", post: "", zhuyin: "ㄉㄧㄥ", masked: "丁", options: ["丁", "了"], diff: "橫折豎 vs 橫撇彎鉤", memo: "一字不識大字丁，事情完結說好了。" },
+      { pre: "", target: "醃", post: "製", zhuyin: "ㄧㄢ", masked: "⬛＋奄", options: ["醃", "淹"], diff: "酉（酒醬） vs 氵（水部）", memo: "鹽醬漬肉稱醃製，水流過滿叫淹水。" },
+      { pre: "", target: "攪", post: "拌", zhuyin: "ㄐㄧㄠˇ", masked: "⬛＋覺", options: ["攪", "覺"], diff: "扌（手部） vs 無手旁", memo: "用手混和去攪拌，睡飽醒來有感覺。" },
+      { pre: "油", target: "炸", post: "", zhuyin: "ㄓㄚˊ", masked: "⬛＋乍", options: ["炸", "昨"], diff: "火（火部） vs 日（日頭）", memo: "熱油下火烹炸酥，昨日已過日字旁。" },
+      { pre: "晶", target: "瑩", post: "", zhuyin: "ㄧㄥˊ", masked: "𤇾＋⬛", options: ["瑩", "螢"], diff: "玉（玉底） vs 虫（虫底）", memo: "美玉光潤晶瑩亮，夜裡飛蟲是螢火。" },
+      { pre: "", target: "饗", post: "宴", zhuyin: "ㄒㄧㄤˇ", masked: "鄉＋⬛", options: ["饗", "響"], diff: "食（食底） vs 音（音底）", memo: "美食擺滿大盛饗，鐘聲遠傳大聲響。" },
+      { pre: "", target: "彰", post: "顯", zhuyin: "ㄓㄤ", masked: "章＋⬛", options: ["彰", "樟"], diff: "彡（文飾） vs 木（木部）", memo: "文采光大明彰顯，芬芳林木是樟樹。" },
+      { pre: "", target: "煮", post: "熟", zhuyin: "ㄓㄨˇ", masked: "者＋⬛", options: ["煮", "著"], diff: "灬（四點火） vs 艹（草頭）", memo: "熱火滾滾鍋中煮，寫作書籍成名著。" },
+      { pre: "", target: "豬", post: "肉", zhuyin: "ㄓㄨ", masked: "⬛＋者", options: ["豬", "諸"], diff: "豕（豬部） vs 言（言部）", memo: "豕字家畜是肥豬，開口說話告諸位。" }
+    ]
+  },
+  5: {
+    title: "第 5 課《最好的味覺禮物》",
+    questions: [
+      { pre: "", target: "削", post: "皮", zhuyin: "ㄒㄧㄠ", masked: "肖＋⬛", options: ["削", "哨"], diff: "刂（刀部） vs 口（口部）", memo: "持刀削皮動作削，吹響號角守崗哨。" },
+      { pre: "泡", target: "沫", post: "", zhuyin: "ㄇㄛˋ", masked: "⬛＋末", options: ["沫", "抹"], diff: "氵（水部） vs 扌（手部）", memo: "肥皂水花成泡沫，動手擦拭叫做抹。" },
+      { pre: "", target: "茶", post: "葉", zhuyin: "ㄔㄚˊ", masked: "艹人＋⬛", options: ["茶", "荼"], diff: "木（木底） vs 示（多一橫）", memo: "人間飲木名好茶，苦菜多橫名如荼。" },
+      { pre: "", target: "嗅", post: "覺", zhuyin: "ㄒㄧㄡˋ", masked: "⬛＋臭", options: ["嗅", "臭"], diff: "口（口部） vs 自＋犬", memo: "張嘴辨氣聞嗅覺，氣味難聞單字臭。" },
+      { pre: "", target: "按", post: "部就班", zhuyin: "ㄢˋ", masked: "⬛＋安", options: ["按", "安"], diff: "扌（手部） vs 宀（屋頂）", memo: "依手步驟照樣按，屋下平安稱安好。" },
+      { pre: "粉身", target: "碎", post: "骨", zhuyin: "ㄙㄨㄟˋ", masked: "⬛＋卒", options: ["碎", "萃"], diff: "石（石部） vs 艹（草頭）", memo: "石頭撞裂粉身碎，草木精華稱萃取。" },
+      { pre: "房", target: "舍", post: "", zhuyin: "ㄕㄜˋ", masked: "人＋干＋⬛", options: ["舍", "吉"], diff: "余部 vs 士＋口", memo: "房屋安歇名宿舍，迎春接福大吉利。" },
+      { pre: "", target: "熬", post: "夜", zhuyin: "ㄠˊ", masked: "敖＋⬛", options: ["熬", "傲"], diff: "灬（火部） vs 亻（單人旁）", memo: "底下火燒苦苦熬，自命不凡是驕傲。" },
+      { pre: "", target: "砂", post: "石", zhuyin: "ㄕㄚ", masked: "⬛＋少", options: ["砂", "沙"], diff: "石（石部） vs 氵（水部）", memo: "粗糙碎石名砂石，水邊細顆是白沙。" },
+      { pre: "", target: "混", post: "合", zhuyin: "ㄏㄨㄣˋ", masked: "⬛＋昆", options: ["混", "棍"], diff: "氵（水部） vs 木（木部）", memo: "水聚攪和成混合，木頭做棒名木棍。" },
+      { pre: "", target: "焦", post: "糖", zhuyin: "ㄐㄧㄠ", masked: "隹＋⬛", options: ["焦", "礁"], diff: "灬（火底） vs 石（石部）", memo: "火燒變黑焦糖焦，海中暗石是暗礁。" },
+      { pre: "", target: "舀", post: "水", zhuyin: "ㄧㄠˇ", masked: "爪＋⬛", options: ["舀", "滔"], diff: "臼（臼部） vs 氵＋舀", memo: "手爪探臼舀清水，大水滾滾浪滔滔。" },
+      { pre: "鐵", target: "勺", post: "", zhuyin: "ㄕㄠˊ", masked: "勺", options: ["勺", "句"], diff: "包點 vs 包含口", memo: "舀湯鐵匙名鐵勺，連綴成篇好句子。" },
+      { pre: "", target: "熄", post: "滅", zhuyin: "ㄒㄧˊ", masked: "⬛＋息", options: ["熄", "息"], diff: "火（火部） vs 自＋心", memo: "火光滅去名為熄，自心平靜來休息。" },
+      { pre: "飛黃", target: "騰", post: "達", zhuyin: "ㄊㄥˊ", masked: "月＋⬛＋馬", options: ["騰", "謄"], diff: "馬（神馬奔騰） vs 言（傳寫）", memo: "駿馬奔馳飛黃騰，言語抄寫稱謄寫。" },
+      { pre: "", target: "啜", post: "泣", zhuyin: "ㄔㄨㄛˋ", masked: "⬛＋叕", options: ["啜", "輟"], diff: "口（口部） vs 車（車部）", memo: "張嘴抽噎微啜泣，停車停頓名輟學。" },
+      { pre: "流", target: "淌", post: "", zhuyin: "ㄊㄤˇ", masked: "⬛＋尚", options: ["淌", "躺"], diff: "氵（水部） vs 身（身體）", memo: "汗水淚水直流淌，倒下身子床上躺。" },
+      { pre: "充", target: "沛", post: "", zhuyin: "ㄆㄟˋ", masked: "⬛＋市", options: ["沛", "肺"], diff: "市（橫折鉤） vs 巿（一貫穿）", memo: "水勢浩大真充沛，呼吸器官是肺臟。" },
+      { pre: "", target: "舔", post: "拭", zhuyin: "ㄊㄧㄢˇ", masked: "舌＋⬛", options: ["舔", "添"], diff: "舌（舌部） vs 氵（水部）", memo: "伸出舌頭用力舔，水流注入平增添。" }
+    ]
+  },
+  6: {
+    title: "第 6 課《珍珠奶茶》",
+    questions: [
+      { pre: "風", target: "靡", post: "", zhuyin: "ㄇㄧˇ", speechWord: "風靡", speechTarget: "靡", masked: "麻＋⬛", options: ["靡", "磨"], diff: "非（靡草） vs 石（石磨）", memo: "草隨風倒風靡全，石器研碎成細磨。" },
+      { pre: "", target: "嫁", post: "接", zhuyin: "ㄐㄧㄚˋ", masked: "⬛＋家", options: ["嫁", "家"], diff: "女（女部） vs 宀（屋頂）", memo: "女子出閣稱出嫁，屋頂有豬是家庭。" },
+      { pre: "", target: "贊", post: "助", zhuyin: "ㄗㄢˋ", masked: "朁＋⬛", options: ["贊", "暫"], diff: "貝（財貨） vs 日（日頭）", memo: "出資相助稱贊助，時間短促是暫時。" },
+      { pre: "相", target: "干", post: "", zhuyin: "ㄍㄢ", masked: "干", options: ["干", "千"], diff: "平頭干 vs 撇頭千", memo: "彼此牽連何相干，數目字上一千千。" },
+      { pre: "", target: "烹", post: "飪", zhuyin: "ㄆㄥ", masked: "亨＋⬛", options: ["烹", "亨"], diff: "灬（火部） vs 無火底", memo: "火上料理叫烹飪，通達順暢大萬亨。" },
+      { pre: "番", target: "薯", post: "", zhuyin: "ㄕㄨˇ", masked: "⬛／署", options: ["薯", "署"], diff: "艹（草頭） vs 罒（網部）", memo: "地底甘藷草字薯，辦公單位名公署。" },
+      { pre: "歲", target: "末", post: "", zhuyin: "ㄇㄛˋ", masked: "末 (上長下短)", options: ["末", "未"], diff: "上長下短 vs 上短下長", memo: "木梢已盡是歲末，將來未來上劃短。" },
+      { pre: "增", target: "添", post: "", zhuyin: "ㄊㄧㄢ", masked: "⬛＋忝", options: ["添", "舔"], diff: "氵（水部） vs 舌（舌部）", memo: "注入清水增添加，伸出舌頭把糖舔。" },
+      { pre: "", target: "擴", post: "展", zhuyin: "ㄎㄨㄛˋ", masked: "⬛＋廣", options: ["擴", "礦"], diff: "扌（手部） vs 石（石部）", memo: "動手拉開大擴展，山中挖石出鐵礦。" },
+      { pre: "聯", target: "袂", post: "", zhuyin: "ㄇㄟˋ", masked: "⬛＋夬", options: ["袂", "決"], diff: "衤（衣部） vs 氵（水部）", memo: "袖子並行名聯袂，水流斷定下決心。" },
+      { pre: "濃", target: "稠", post: "", zhuyin: "ㄔㄡˊ", masked: "⬛＋周", options: ["稠", "綢"], diff: "禾（禾部） vs 糹（絞絲）", memo: "米穀濃密質濃稠，絲織滑順是綢緞。" },
+      { pre: "", target: "衡", post: "量", zhuyin: "ㄏㄥˊ", masked: "行＋⬛", options: ["衡", "衝"], diff: "角大（角部） vs 重（重量）", memo: "車轅秤錘相衡量，邁步前行往前衝。" },
+      { pre: "", target: "徜", post: "徉", zhuyin: "ㄔㄤˊ", masked: "⬛＋尚", options: ["徜", "尚"], diff: "彳（雙人） vs 純尚字", memo: "悠閒漫步去徜徉，崇高風尚純是尚。" },
+      { pre: "徜", target: "徉", post: "", zhuyin: "ㄧㄤˊ", masked: "⬛＋羊", options: ["徉", "洋"], diff: "彳（雙人） vs 氵（水部）", memo: "雙腳隨意走徜徉，浩瀚大海是大洋。" },
+      { pre: "", target: "撫", post: "摸", zhuyin: "ㄈㄨˇ", masked: "⬛＋無", options: ["撫", "無"], diff: "扌（手部） vs 純無字", memo: "伸手輕柔來撫摸，空空如也沒有無。" },
+      { pre: "菩", target: "薩", post: "", zhuyin: "ㄙㄚˋ", masked: "⬛／産", options: ["薩", "產"], diff: "艹＋産 vs 純產", memo: "草蓋慈悲大菩薩，母生孩兒是生產。" },
+      { pre: "", target: "乳", post: "酪", zhuyin: "ㄖㄨˇ", masked: "孚＋⬛", options: ["乳", "浮"], diff: "乚（曲畫） vs 氵（水部）", memo: "哺育幼子香乳酪，漂在水上叫做浮。" }
+    ]
+  },
+  7: {
+    title: "第 7 課《大小剛好的鞋子》",
+    questions: [
+      { pre: "", target: "仰", post: "望", zhuyin: "ㄧㄤˇ", masked: "⬛＋卬", options: ["仰", "抑"], diff: "亻（單人旁） vs 扌（手部）", memo: "抬頭望天真仰慕，動手壓下叫壓抑。" },
+      { pre: "", target: "緬", post: "甸", zhuyin: "ㄇㄧㄢˇ", masked: "⬛＋面", options: ["緬", "面"], diff: "糹（絞絲） vs 純面字", memo: "絲線悠遠憶緬懷，臉上五官叫臉面。" },
+      { pre: "緬", target: "甸", post: "", zhuyin: "ㄉㄧㄢˋ", masked: "勹＋⬛", options: ["甸", "田"], diff: "勹包田 vs 純田字", memo: "郊外封地是沉甸，泥中耕耘一畝田。" },
+      { pre: "腳", target: "踝", post: "", zhuyin: "ㄏㄨㄞˊ", masked: "⬛＋果", options: ["踝", "裸"], diff: "足（足部） vs 衤（衣部）", memo: "雙腳關節叫腳踝，脫去衣服成赤裸。" },
+      { pre: "呢", target: "絨", post: "", zhuyin: "ㄖㄨㄥˊ", masked: "⬛＋戎", options: ["絨", "賊"], diff: "糹（絞絲） vs 貝（貝部）", memo: "絲質柔軟細呢絨，搶奪錢財名盜賊。" },
+      { pre: "噴", target: "濺", post: "", zhuyin: "ㄐㄧㄢˋ", masked: "⬛＋賤", options: ["濺", "賤"], diff: "氵（水部） vs 貝（貝部）", memo: "水珠飛起向外濺，低廉便宜說貧賤。" },
+      { pre: "裙", target: "擺", post: "", zhuyin: "ㄅㄞˇ", masked: "⬛＋罷", options: ["擺", "罷"], diff: "扌（手部） vs 四（網部）", memo: "手搖裙盪稱裙擺，收網停工叫作罷。" },
+      { pre: "玩", target: "弄", post: "", zhuyin: "ㄋㄨㄥˋ", masked: "王＋⬛", options: ["弄", "併"], diff: "廾（雙手弄玉） vs 亻（單人旁）", memo: "雙手玩玉叫玩弄，人立相合名合併。" },
+      { pre: "", target: "恣", post: "意", zhuyin: "ㄗˋ", masked: "次＋⬛", options: ["恣", "次"], diff: "心（心底） vs 純次字", memo: "縱心妄為是恣意，先後次序位居次。" },
+      { pre: "", target: "批", post: "評", zhuyin: "ㄆㄧ", masked: "⬛＋比", options: ["批", "比"], diff: "扌（手部） vs 純比字", memo: "用手評正做批評，兩相比較評高低。" },
+      { pre: "捷", target: "徑", post: "", zhuyin: "ㄐㄧㄥˋ", masked: "彳＋⬛", options: ["徑", "經"], diff: "巠（小路徑） vs 糹（絲部）", memo: "雙腳捷走小捷徑，絲線穿梭成經典。" },
+      { pre: "", target: "謹", post: "慎", zhuyin: "ㄐㄧㄣˇ", masked: "⬛＋堇", options: ["謹", "勤"], diff: "言（言部） vs 力（力部）", memo: "說話小心是謹言，出力流汗真勤勞。" },
+      { pre: "", target: "恰", post: "到好處", zhuyin: "ㄑㄧㄚˋ", masked: "⬛＋合", options: ["恰", "合"], diff: "忄（心部） vs 純合字", memo: "心意適當恰恰好，聚合團圓一口合。" },
+      { pre: "分身", target: "乏", post: "術", zhuyin: "ㄈㄚˊ", masked: "乏", options: ["乏", "之"], diff: "橫撇點 vs 之字拐", memo: "體力空缺稱疲乏，春風化雨這首詩之。" },
+      { pre: "比比", target: "皆", post: "是", zhuyin: "ㄐㄧㄝ", masked: "比＋⬛", options: ["皆", "階"], diff: "白（白部） vs 阝（左耳）", memo: "眾人同看全都皆，土石疊起成階梯。" },
+      { pre: "", target: "嗤", post: "之以鼻", zhuyin: "ㄔ", masked: "⬛＋蚩", options: ["嗤", "吹"], diff: "口＋蚩 vs 口＋欠", memo: "張口嗤笑嗤之鼻，呼氣張嘴大風吹。" }
+    ]
+  },
+  8: {
+    title: "第 8 課《狐假虎威》",
+    questions: [
+      { pre: "", target: "策", post: "劃", zhuyin: "ㄘㄜˋ", masked: "⬛／朿", options: ["策", "束"], diff: "竹（竹頭） vs 木（木部）", memo: "竹簡出謀叫策劃，木柴綑綁是一束。" },
+      { pre: "", target: "劉", post: "邦", zhuyin: "ㄌㄧㄡˊ", masked: "卯金＋⬛", options: ["劉", "留"], diff: "刂（刀部） vs 田（田部）", memo: "金戈大姓劉邦劉，田舍停留且挽留。" },
+      { pre: "編", target: "纂", post: "", zhuyin: "ㄗㄨㄢˇ", masked: "竹＋目＋⬛", options: ["纂", "算"], diff: "糸（絲底） vs 廾（雙手）", memo: "編整文簡用絲纂，雙手握算盤盤算。" },
+      { pre: "", target: "寓", post: "言", zhuyin: "ㄩˋ", masked: "⬛＋禺", options: ["寓", "遇"], diff: "宀（屋頂） vs 辶（走步）", memo: "房屋藏義叫寓言，走在路上巧相遇。" },
+      { pre: "", target: "鷸", post: "蚌相爭", zhuyin: "ㄩˋ", masked: "矞＋⬛", options: ["鷸", "譎"], diff: "鳥（鳥部） vs 言（言部）", memo: "水邊長嘴是鷸鳥，言語詭詐真譎詐。" },
+      { pre: "鷸", target: "蚌", post: "相爭", zhuyin: "ㄅㄤˋ", masked: "⬛＋丰", options: ["蚌", "棒"], diff: "虫（虫部） vs 木（木部）", memo: "水中硬殼是蛤蚌，木頭削成球力棒。" },
+      { pre: "", target: "述", post: "說", zhuyin: "ㄕㄨˋ", masked: "⬛＋术", options: ["述", "術"], diff: "辶（走部） vs 行（行部）", memo: "順路細講述說清，醫道醫術行中術。" },
+      { pre: "", target: "赫", post: "赫", zhuyin: "ㄏㄜˋ", masked: "赤＋⬛", options: ["赫", "赤"], diff: "雙赤並列 vs 純赤字", memo: "雙赤輝煌赫赫明，赤子真心單寫赤。" },
+      { pre: "", target: "畏", post: "懼", zhuyin: "ㄨㄟˋ", masked: "田＋⬛", options: ["畏", "威"], diff: "田＋下部 vs 戈＋女", memo: "見鬼懼怕感畏懼，兵戈護女顯神威。" },
+      { pre: "", target: "詢", post: "問", zhuyin: "ㄒㄩㄣˊ", masked: "⬛＋旬", options: ["詢", "旬"], diff: "言（言部） vs 勹（包部）", memo: "開口探求稱詢問，十天為期是一旬。" },
+      { pre: "子", target: "曰", post: "", zhuyin: "ㄩㄝ", masked: "曰 (寬扁)", options: ["曰", "日"], diff: "扁寬張口 vs 瘦長太陽", memo: "聖人張口子曰曰，天上照耀長太陽。" },
+      { pre: "", target: "吾", post: "人", zhuyin: "ㄨˊ", masked: "五＋⬛", options: ["吾", "五"], diff: "口（口部） vs 純五字", memo: "張口自稱是吾人，單純數字一四五。" },
+      { pre: "", target: "遂", post: "願", zhuyin: "ㄙㄨㄟˋ", masked: "⬛＋豕", options: ["遂", "逐"], diff: "辶＋㒸 vs 辶＋豕", memo: "心想事成終遂願，追逐獵物步步逐。" },
+      { pre: "", target: "諷", post: "刺", zhuyin: "ㄈㄥˋ", masked: "⬛＋風", options: ["諷", "風"], diff: "言（言部） vs 純風字", memo: "言語微刺叫諷刺，空氣流動迎面風。" },
+      { pre: "蒙", target: "蔽", post: "", zhuyin: "ㄅㄧˋ", masked: "⬛／敝", options: ["蔽", "幣"], diff: "艹（草頭） vs 巾（巾部）", memo: "草木遮掩受蒙蔽，布帛金錢是貨幣。" },
+      { pre: "", target: "妨", post: "礙", zhuyin: "ㄈㄤˊ", masked: "⬛＋方", options: ["妨", "仿"], diff: "女（女部） vs 亻（單人旁）", memo: "阻擾為難叫妨礙，人學模樣是模仿。" },
+      { pre: "", target: "虛", post: "張聲勢", zhuyin: "ㄒㄩ", masked: "虍＋⬛", options: ["虛", "虎"], diff: "業底 vs 几（虎爪）", memo: "內空無物是虛無，山林猛獸大老虎。" },
+      { pre: "", target: "誘", post: "導", zhuyin: "ㄧㄡˋ", masked: "⬛＋秀", options: ["誘", "秀"], diff: "言（言部） vs 禾＋乃", memo: "言語吸引稱誘導，禾出稻穗清秀秀。" }
+    ]
+  },
+  9: {
+    title: "第 9 課《空城計》",
+    questions: [
+      { pre: "涼", target: "亭", post: "", zhuyin: "ㄊㄧㄥˊ", masked: "亠＋口＋⬛", options: ["亭", "停"], diff: "純亭部 vs 亻（單人旁）", memo: "林間歇腳是涼亭，行人止步叫停止。" },
+      { pre: "", target: "支", post: "撐", zhuyin: "ㄓ", masked: "支", options: ["支", "採"], diff: "十＋又 vs 爫＋木", memo: "雙手頂住叫支撐，手上採果大採摘。" },
+      { pre: "西城", target: "縣", post: "", zhuyin: "ㄒㄧㄢˋ", masked: "目＋⬛", options: ["縣", "懸"], diff: "純縣部 vs 心（心部）", memo: "管轄行政是區縣，心懸半空叫懸念。" },
+      { pre: "司馬", target: "懿", post: "", zhuyin: "ㄧˋ", masked: "壹＋⬛", options: ["懿", "壹"], diff: "恣＋欠 vs 純壹字", memo: "美德深遠司馬懿，大寫數字稱第一。" },
+      { pre: "", target: "剩", post: "餘", zhuyin: "ㄕㄥˋ", masked: "乘＋⬛", options: ["剩", "乘"], diff: "刂（刀部） vs 純乘字", memo: "刀切多出叫剩餘，登車而行是乘坐。" },
+      { pre: "", target: "魏", post: "國", zhuyin: "ㄨㄟˋ", masked: "委＋⬛", options: ["魏", "鬼"], diff: "委（委部） vs 純鬼字", memo: "三國鼎立曹魏國，幽魂神靈單字鬼。" },
+      { pre: "", target: "旗", post: "幟", zhuyin: "ㄑㄧˊ", masked: "㫃＋⬛", options: ["旗", "奇"], diff: "㫃（旗部） vs 大＋可", memo: "軍隊招展大軍旗，驚異少見真新奇。" },
+      { pre: "旗", target: "幟", post: "", zhuyin: "ㄓˋ", masked: "⬛＋戠", options: ["幟", "識"], diff: "巾（巾部） vs 言（言部）", memo: "布帛招展是旗幟，言語認得真見識。" },
+      { pre: "站", target: "崗", post: "", zhuyin: "ㄍㄤˇ", masked: "⬛／岡", options: ["崗", "岡"], diff: "山（山頭） vs 純岡字", memo: "山頭駐守稱站崗，山脊隆起是山岡。" },
+      { pre: "百", target: "姓", post: "", zhuyin: "ㄒㄧㄥˋ", masked: "⬛＋生", options: ["姓", "性"], diff: "女（女部） vs 忄（心部）", memo: "女子氏族是姓名，心中天賦叫個性。" },
+      { pre: "", target: "倘", post: "若", zhuyin: "ㄊㄤˇ", masked: "⬛＋尚", options: ["倘", "尚"], diff: "亻（單人旁） vs 純尚字", memo: "假如假若是倘若，崇高品德風尚在。" },
+      { pre: "侍", target: "僮", post: "", zhuyin: "ㄊㄨㄥˊ", masked: "⬛＋童", options: ["僮", "童"], diff: "亻（單人旁） vs 純童字", memo: "隨身小僕名侍僮，天真無邪小兒童。" },
+      { pre: "", target: "薰", post: "陶", zhuyin: "ㄒㄩㄣ", masked: "⬛／熏", options: ["薰", "熏"], diff: "艹（草頭） vs 純熏字", memo: "芬芳草木能薰陶，火烤煙氣名黑熏。" },
+      { pre: "", target: "撤", post: "退", zhuyin: "ㄔㄜˋ", masked: "⬛＋徹(省)", options: ["撤", "撒"], diff: "攵（敲擊） vs 散（散落）", memo: "抽手退兵名撤退，放手飄落到處撒。" },
+      { pre: "", target: "諸", post: "葛亮", zhuyin: "ㄓㄨ", masked: "⬛＋者", options: ["諸", "著"], diff: "言（言部） vs 艹（草頭）", memo: "臥龍先生諸葛亮，落筆成書叫著名。" },
+      { pre: "", target: "慎", post: "重", zhuyin: "ㄕㄣˋ", masked: "⬛＋眞", options: ["慎", "順"], diff: "忄（心部） vs 頁（頁部）", memo: "小心在意真慎重，風調雨順一切順。" },
+      { pre: "", target: "丞", post: "相", zhuyin: "ㄔㄥˊ", masked: "丞", options: ["丞", "承"], diff: "了山＋橫 vs 承接手部", memo: "輔佐國君大丞相，雙手向上表承擔。" }
+    ]
+  },
+  10: {
+    title: "第 10 課《耶誕節》",
+    questions: [
+      { pre: "", target: "耶", post: "誕", zhuyin: "ㄧㄝ", masked: "耳＋⬛", options: ["耶", "爺"], diff: "阝（右耳） vs 父（父部）", memo: "西洋節慶耶誕節，父親之父是爺爺。" },
+      { pre: "", target: "郊", post: "外", zhuyin: "ㄐㄧㄠ", masked: "交＋⬛", options: ["郊", "交"], diff: "阝（邑部） vs 純交字", memo: "城外荒野是郊外，朋友結伴叫交往。" },
+      { pre: "", target: "慈", post: "祥", zhuyin: "ㄘˊ", masked: "茲＋⬛", options: ["慈", "滋"], diff: "心（心底） vs 氵（水部）", memo: "滿心仁愛真慈祥，水潤萬物得滋養。" },
+      { pre: "慈", target: "祥", post: "", zhuyin: "ㄒㄧㄤˊ", masked: "⬛＋羊", options: ["祥", "詳"], diff: "礻（神祈） vs 言（言部）", memo: "神明降福吉祥樣，開口細說講詳細。" },
+      { pre: "", target: "劈", post: "啪", zhuyin: "ㄆㄧ", masked: "辟＋⬛", options: ["劈", "避"], diff: "刀（刀底） vs 辶（走步）", memo: "利刀下砍發劈響，退步閃開去躲避。" },
+      { pre: "劈", target: "啪", post: "", zhuyin: "ㄆㄚ", masked: "⬛＋白", options: ["啪", "拍"], diff: "口（口部） vs 扌（手部）", memo: "爆竹爆裂聲響啪，雙手揮動用力拍。" },
+      { pre: "", target: "零", post: "錢", zhuyin: "ㄌㄧㄥˊ", masked: "雨＋⬛", options: ["零", "靈"], diff: "令（令部） vs 巫（巫部）", memo: "小錢細碎是零錢，聰慧敏捷真靈巧。" },
+      { pre: "", target: "厭", post: "倦", zhuyin: "ㄧㄢˋ", masked: "厂＋⬛", options: ["厭", "壓"], diff: "犬（犬部） vs 土（土部）", memo: "心生排斥討厭厭，力拔山河泰山壓。" },
+      { pre: "厭", target: "倦", post: "", zhuyin: "ㄐㄩㄢˋ", masked: "⬛＋卷", options: ["倦", "卷"], diff: "亻（單人旁） vs 純卷字", memo: "人疲力盡真疲倦，書本卷冊是一卷。" },
+      { pre: "", target: "辯", post: "護", zhuyin: "ㄅㄧㄢˋ", masked: "辛＋言＋⬛", options: ["辯", "辨"], diff: "言（言中） vs 刂（刀中）", memo: "開口雄辯去辯護，刀分真假能分辨。" },
+      { pre: "大公無", target: "私", post: "", zhuyin: "ㄙ", masked: "禾＋⬛", options: ["私", "司"], diff: "禾＋厶 vs 純司字", memo: "心無偏頗無私心，掌理公務大司令。" },
+      { pre: "", target: "貧", post: "窮", zhuyin: "ㄆㄧㄣˊ", masked: "分＋⬛", options: ["貧", "貪"], diff: "分＋貝 vs 今＋貝", memo: "財富分散成貧窮，貪求無度是貪心。" },
+      { pre: "關", target: "係", post: "", zhuyin: "ㄒㄧˋ", masked: "⬛＋系", options: ["係", "系"], diff: "亻（單人旁） vs 純系字", memo: "人與人牽有關係，學科分類是學系。" },
+      { pre: "", target: "趁", post: "機", zhuyin: "ㄔㄣˋ", masked: "走＋⬛", options: ["趁", "診"], diff: "走＋㐱 vs 言＋㐱", memo: "快步把握趁機會，醫生看病是門診。" },
+      { pre: "", target: "稍", post: "微", zhuyin: "ㄕㄠ", masked: "⬛＋肖", options: ["稍", "俏"], diff: "禾（禾部） vs 亻（單人旁）", memo: "禾苗稍長是稍微，面貌美麗真俊俏。" },
+      { pre: "", target: "罕", post: "見", zhuyin: "ㄏㄢˇ", masked: "冖＋⬛", options: ["罕", "干"], diff: "冖＋干 vs 純干字", memo: "網稀少見叫罕見，盾牌相干單用干。" },
+      { pre: "", target: "烘", post: "托", zhuyin: "ㄏㄨㄥ", masked: "⬛＋共", options: ["烘", "紅"], diff: "火（火部） vs 糹（絞絲）", memo: "火光溫暖烘托美，絲染丹霞大喜紅。" },
+      { pre: "", target: "衷", post: "心", zhuyin: "ㄓㄨㄥ", masked: "衣中＋⬛", options: ["衷", "衰"], diff: "中（心中） vs 衰（哀字心）", memo: "打從心底稱衷心，年老力竭落衰弱。" },
+      { pre: "", target: "鋼", post: "鐵", zhuyin: "ㄍㄤ", masked: "⬛＋岡", options: ["鋼", "剛"], diff: "金（金屬） vs 刂（刀部）", memo: "堅硬合金名鋼鐵，陽剛正氣性格剛。" }
+    ]
+  },
+  11: {
+    title: "第 11 課《下午茶風波》",
+    questions: [
+      { pre: "", target: "楓", post: "林", zhuyin: "ㄈㄥ", masked: "⬛＋風", options: ["楓", "諷"], diff: "木（木部） vs 言（言部）", memo: "深秋紅葉是楓樹，言語譏笑是諷刺。" },
+      { pre: "", target: "恢", post: "復", zhuyin: "ㄏㄨㄟ", masked: "⬛＋灰", options: ["恢", "灰"], diff: "忄（心部） vs 純灰字", memo: "心境重整名恢復，火化成塵石灰灰。" },
+      { pre: "活", target: "潑", post: "", zhuyin: "ㄆㄛ", masked: "⬛＋發", options: ["潑", "撥"], diff: "氵（水部） vs 扌（手部）", memo: "如水躍動真活潑，動手調弄用手撥。" },
+      { pre: "草", target: "莓", post: "", zhuyin: "ㄇㄟˊ", masked: "⬛／每", options: ["莓", "每"], diff: "艹（草頭） vs 純每字", memo: "鮮甜果子叫草莓，常常見到是每天。" },
+      { pre: "大", target: "廳", post: "", zhuyin: "ㄊㄧㄥ", masked: "广＋⬛", options: ["廳", "聽"], diff: "广（廣字頭） vs 耳（耳部）", memo: "屋宇寬敞是大廳，用耳專注來傾聽。" },
+      { pre: "", target: "額", post: "頭", zhuyin: "ㄜˊ", masked: "客＋⬛", options: ["額", "客"], diff: "頁（頁部） vs 純客字", memo: "臉龐頂端是額頭，來訪朋友是客人。" },
+      { pre: "", target: "灌", post: "溉", zhuyin: "ㄍㄨㄢˋ", masked: "⬛＋雚", options: ["灌", "罐"], diff: "氵（水部） vs 缶（瓦罐）", memo: "水流滋土叫灌溉，泥瓦盛物名水罐。" },
+      { pre: "", target: "醉", post: "倒", zhuyin: "ㄗㄨㄟˋ", masked: "酉＋⬛", options: ["醉", "碎"], diff: "酉（酒部） vs 石（石部）", memo: "飲酒過多迷醉倒，盤子落地全摔碎。" },
+      { pre: "", target: "釀", post: "造", zhuyin: "ㄋㄧㄤˋ", masked: "酉＋⬛", options: ["釀", "讓"], diff: "酉（酒部） vs 言（言部）", memo: "發酵成酒稱釀造，謙恭禮敬相互讓。" },
+      { pre: "", target: "替", post: "換", zhuyin: "ㄊㄧˋ", masked: "夫夫＋⬛", options: ["替", "潛"], diff: "日（日底） vs 氵＋日", memo: "相互代勞是替換，水裡游進叫潛水。" },
+      { pre: "原", target: "諒", post: "", zhuyin: "ㄌㄧㄤˋ", masked: "⬛＋京", options: ["諒", "涼"], diff: "言（言部） vs 冫（兩點冰）", memo: "寬和言語求原諒，秋風吹來好清涼。" },
+      { pre: "", target: "脣", post: "齒", zhuyin: "ㄔㄨㄣˊ", masked: "辰＋⬛", options: ["脣", "辱"], diff: "口（口部） vs 寸（法度）", memo: "嘴邊紅肉稱脣齒，犯法羞愧是恥辱。" },
+      { pre: "", target: "奔", post: "跑", zhuyin: "ㄅㄣ", masked: "大＋⬛", options: ["奔", "卉"], diff: "十十十 vs 卉花部", memo: "邁開大步狂奔跑，萬木繁盛名花卉。" },
+      { pre: "", target: "乞", post: "討", zhuyin: "ㄑㄧˇ", masked: "乞 (無橫)", options: ["乞", "氣"], diff: "純乞無橫 vs 气＋米", memo: "求人給食稱乞討，呼吸出胸一口氣。" },
+      { pre: "", target: "某", post: "人", zhuyin: "ㄇㄡˇ", masked: "甘＋⬛", options: ["某", "甘"], diff: "木（木底） vs 純甘字", memo: "不知名氏稱某人，甜美如蜜味至甘。" },
+      { pre: "", target: "煥", post: "然一新", zhuyin: "ㄏㄨㄢˋ", masked: "⬛＋奐", options: ["煥", "換"], diff: "火（火部） vs 扌（手部）", memo: "火光耀眼煥然新，動手交替把它換。" },
+      { pre: "雪", target: "橇", post: "", zhuyin: "ㄑㄧㄠ", masked: "⬛＋毳", options: ["橇", "撬"], diff: "木（木部） vs 扌（手部）", memo: "木行雪上名雪橇，拿棍動手用力撬。" },
+      { pre: "門", target: "鈴", post: "", zhuyin: "ㄌㄧㄥˊ", masked: "⬛＋令", options: ["鈴", "玲"], diff: "金（金屬） vs 王（玉部）", memo: "金屬按響是門鈴，玉聲清脆叫玲瓏。" },
+      { pre: "", target: "迴", post: "旋", zhuyin: "ㄏㄨㄟˊ", masked: "⬛＋回", options: ["迴", "回"], diff: "辶（走部） vs 純回字", memo: "走步轉折稱迴旋，原處折返單寫回。" }
+    ]
+  },
+  12: {
+    title: "第 12 課《橘子》",
+    questions: [
+      { pre: "車", target: "廂", post: "", zhuyin: "ㄒㄧㄤ", masked: "⬛／相", options: ["廂", "相"], diff: "广（廣字頭） vs 純相字", memo: "車內座落大車廂，互相往來互照相。" },
+      { pre: "臉", target: "頰", post: "", zhuyin: "ㄐㄧㄚˊ", masked: "夾＋⬛", options: ["頰", "夾"], diff: "頁（頁部） vs 純夾字", memo: "面容兩側是臉頰，兩物擠壓叫緊夾。" },
+      { pre: "包", target: "袱", post: "", zhuyin: "ㄈㄨˊ", masked: "⬛＋伏", options: ["袱", "伏"], diff: "衤（衣部） vs 純伏字", memo: "布帛包紮成包袱，低身隱藏叫埋伏。" },
+      { pre: "膿", target: "瘡", post: "", zhuyin: "ㄔㄨㄤ", masked: "疒＋⬛", options: ["瘡", "蒼"], diff: "疒（病部） vs 艹（草頭）", memo: "皮肉生爛長膿瘡，草木枯老一片蒼。" },
+      { pre: "狼", target: "狽", post: "", zhuyin: "ㄅㄟˋ", masked: "⬛＋貝", options: ["狽", "貝"], diff: "犭（犬部） vs 純貝字", memo: "前短後長獸狼狽，海邊彩殼是寶貝。" },
+      { pre: "疲", target: "憊", post: "", zhuyin: "ㄅㄟˋ", masked: "備＋⬛", options: ["憊", "備"], diff: "心（心底） vs 純備字", memo: "身心累垮成疲憊，預先整齊防備用。" },
+      { pre: "", target: "淒", post: "涼", zhuyin: "ㄑㄧ", masked: "⬛＋妻", options: ["淒", "妻"], diff: "冫（兩點水） vs 純妻字", memo: "寒風徹骨真淒涼，結髮夫妻好賢妻。" },
+      { pre: "", target: "隧", post: "道", zhuyin: "ㄙㄨㄟˋ", masked: "阝＋⬛", options: ["隧", "遂"], diff: "阝（左耳山石） vs 純遂字", memo: "鑿山穿洞名隧道，心願達到稱順遂。" },
+      { pre: "", target: "卯", post: "足全力", zhuyin: "ㄇㄠˇ", masked: "卯", options: ["卯", "卵"], diff: "無內點 vs 有內點", memo: "卯時全力卯足勁，產下鳥蛋是鳥卵。" },
+      { pre: "如雷", target: "貫", post: "耳", zhuyin: "ㄍㄨㄢˋ", masked: "毌＋⬛", options: ["貫", "慣"], diff: "貝（貝部） vs 忄（心部）", memo: "連串相通如雷貫，習以為常叫習慣。" },
+      { pre: "", target: "岔", post: "路", zhuyin: "ㄔㄚˋ", masked: "分＋⬛", options: ["岔", "山"], diff: "分＋山 vs 純山字", memo: "山道分支成岔路，三峰並立是青山。" },
+      { pre: "欄", target: "柵", post: "", zhuyin: "ㄓㄢˋ", speechWord: "欄站", speechTarget: "站", masked: "⬛＋冊", options: ["柵", "冊"], diff: "木（木部） vs 純冊字", memo: "木條圍起成欄柵，竹簡串起是一冊。" },
+      { pre: "", target: "矮", post: "小", zhuyin: "ㄞˇ", masked: "矢＋⬛", options: ["矮", "委"], diff: "矢＋委 vs 禾＋女", memo: "身量不高矮小矮，任託付人是委託。" },
+      { pre: "", target: "陰", post: "暗", zhuyin: "ㄧㄣ", masked: "⬛＋侌", options: ["陰", "音"], diff: "阝（左耳） vs 純音字", memo: "山背無光名陰暗，耳聽律動是聲音。" },
+      { pre: "", target: "扔", post: "掉", zhuyin: "ㄖㄥ", masked: "⬛＋乃", options: ["扔", "仍"], diff: "扌（手部） vs 亻（單人旁）", memo: "動手拋棄隨手扔，依然故我是仍然。" },
+      { pre: "茫", target: "茫", post: "", zhuyin: "ㄇㄤˊ", masked: "⬛／芒", options: ["茫", "忙"], diff: "艹（草頭） vs 忄（心部）", memo: "大水浩大白茫茫，事務繁多天天忙。" },
+      { pre: "", target: "悶", post: "熱", zhuyin: "ㄇㄣ", masked: "門＋⬛", options: ["悶", "門"], diff: "心（心底） vs 純門字", memo: "心鎖屋內感悶熱，進出開關大扇門。" }
+    ]
+  }
+};
+
+let currentLesson = 1;
+let currentQuestionIndex = 0;
+let currentMode = 'choice';
+let hasAnswered = false;
+
+// 遊戲化激勵數值
+let userExp = parseInt(localStorage.getItem('userExp_G6') || '0');
+let userLevel = parseInt(localStorage.getItem('userLevel_G6') || '1');
+let usedSOSCount = 0;
+const ranks = ["Lv.1 生字見習生", "Lv.2 偏旁探索家", "Lv.3 漢字小達人", "Lv.4 語詞大宗師", "Lv.5 國語神射手"];
+
+function saveProgress() {
+  localStorage.setItem('userExp_G6', userExp);
+  localStorage.setItem('userLevel_G6', userLevel);
+}
+
+function addExperience(pts) {
+  userExp += pts;
+  if (userExp >= 100) {
+    userExp -= 100;
+    if (userLevel < ranks.length) {
+      userLevel++;
+      alert(`🎉 恭喜升級！晉升為【${ranks[userLevel-1]}】！獲得全新稱號徽章！`);
+    }
+  }
+  saveProgress();
+  updateExpUI();
+}
+
+function updateExpUI() {
+  document.getElementById("userRankBadge").textContent = ranks[userLevel-1];
+  document.getElementById("expFill").style.width = `${userExp}%`;
+  document.getElementById("expText").textContent = `${userExp}/100`;
+}
+
+// 語音報讀：「壓軸的軸」（支援破音字校正）
+function speakCurrentWord() {
+  if (!('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+
+  const q = lessonsData[currentLesson].questions[currentQuestionIndex];
+  const wordSpoken = q.speechWord || `${q.pre}${q.target}${q.post}`;
+  const charSpoken = q.speechTarget || q.target;
+  const text = `${wordSpoken}的${charSpoken}`;
+
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = 'zh-TW';
+  utterance.rate = 0.85;
+
+  window.speechSynthesis.speak(utterance);
+}
+
+// 語音報讀口訣
+function speakHintMnemonic() {
+  if (!('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+
+  const q = lessonsData[currentLesson].questions[currentQuestionIndex];
+  const utterance = new SpeechSynthesisUtterance(q.memo);
+  utterance.lang = 'zh-TW';
+  utterance.rate = 0.85;
+
+  window.speechSynthesis.speak(utterance);
+}
+
+function initLessonSelect() {
+  const select = document.getElementById("lessonSelect");
+  select.innerHTML = "";
+  for (let i = 1; i <= 12; i++) {
+    const opt = document.createElement("option");
+    opt.value = i;
+    opt.textContent = lessonsData[i].title;
+    select.appendChild(opt);
+  }
+}
+
+function switchMode(mode) {
+  currentMode = mode;
+  document.getElementById("modeChoiceBtn").classList.toggle("active", mode === 'choice');
+  document.getElementById("modeWriteBtn").classList.toggle("active", mode === 'write');
+  loadQuestion();
+}
+
+function changeLesson(lessonNum) {
+  currentLesson = parseInt(lessonNum);
+  currentQuestionIndex = 0;
+  loadQuestion();
+}
+
+function loadQuestion() {
+  hasAnswered = false;
+  usedSOSCount = 0;
+  const qList = lessonsData[currentLesson].questions;
+  const q = qList[currentQuestionIndex];
+
+  document.getElementById("scoreDisplay").textContent = `第 ${currentQuestionIndex + 1} / ${qList.length} 題`;
+  document.getElementById("progressBar").style.width = `${((currentQuestionIndex) / qList.length) * 100}%`;
+
+  const phraseContainer = document.getElementById("phraseDisplay");
+  phraseContainer.innerHTML = `
+    <span>${q.pre}</span>
+    <div class="target-zhuyin-box">${q.zhuyin}</div>
+    <span>${q.post}</span>
+  `;
+
+  const hintBox = document.getElementById("hintBox");
+  hintBox.style.display = "none";
+  document.getElementById("hintContent").innerHTML = `
+    <strong>🔍 部件差異：</strong>${q.diff}<br>
+    <strong>💡 記憶口訣：</strong>${q.memo}
+  `;
+
+  const feedbackBox = document.getElementById("feedbackBox");
+  feedbackBox.style.display = "none";
+  document.getElementById("nextBtn").style.display = "none";
+
+  if (currentMode === 'choice') {
+    document.getElementById("optionsGrid").style.display = "grid";
+    document.getElementById("maskedWriteContainer").style.display = "none";
+
+    const optionsGrid = document.getElementById("optionsGrid");
+    optionsGrid.innerHTML = "";
+    const shuffledOptions = [...q.options].sort(() => Math.random() - 0.5);
+
+    shuffledOptions.forEach(optChar => {
+      const btn = document.createElement("button");
+      btn.className = "btn-opt";
+      btn.textContent = optChar;
+      btn.disabled = false;
+      btn.onclick = () => handleChoice(optChar, btn);
+      optionsGrid.appendChild(btn);
+    });
+  } else {
+    document.getElementById("optionsGrid").style.display = "none";
+    document.getElementById("maskedWriteContainer").style.display = "flex";
+
+    document.getElementById("maskedCharDisplay").textContent = q.masked || q.target;
+    document.getElementById("watermarkGuide").textContent = q.target;
+    document.getElementById("watermarkGuide").style.display = "none";
+    document.getElementById("sosMessage").style.display = "none";
+    document.getElementById("revealBox").style.display = "none";
+    clearCanvas();
+  }
+
+  speakCurrentWord();
+}
+
+function toggleHint() {
+  const hintBox = document.getElementById("hintBox");
+  hintBox.style.display = hintBox.style.display === "none" ? "block" : "none";
+}
+
+function handleChoice(chosenChar, btnElement) {
+  if (hasAnswered) return;
+  hasAnswered = true;
+
+  const q = lessonsData[currentLesson].questions[currentQuestionIndex];
+  const isCorrect = (chosenChar === q.target);
+  const feedbackBox = document.getElementById("feedbackBox");
+
+  document.querySelectorAll(".btn-opt").forEach(btn => {
+    btn.disabled = true;
+    if (btn.textContent === q.target) btn.classList.add("correct");
+  });
+
+  if (isCorrect) {
+    btnElement.classList.add("correct");
+    feedbackBox.className = "feedback-box correct";
+    feedbackBox.innerHTML = `<strong>太棒了，答對了！</strong> 正確字是【${q.target}】。<br>口訣：${q.memo}`;
+    addExperience(25);
+  } else {
+    btnElement.classList.add("wrong");
+    feedbackBox.className = "feedback-box wrong";
+    feedbackBox.innerHTML = `<strong>再看清楚喔！</strong> 正確字是【${q.target}】。<br>差異：${q.diff}<br>口訣：${q.memo}`;
+    document.getElementById("hintBox").style.display = "block";
+    addExperience(5);
+  }
+
+  feedbackBox.style.display = "block";
+  showNextButton();
+}
+
+function triggerSOS(level) {
+  const q = lessonsData[currentLesson].questions[currentQuestionIndex];
+  const sosMsg = document.getElementById("sosMessage");
+  usedSOSCount++;
+
+  if (level === 1) {
+    sosMsg.style.display = "block";
+    sosMsg.innerHTML = `💡 <strong>結構提示：</strong>${q.diff}`;
+  } else if (level === 2) {
+    document.getElementById("watermarkGuide").style.display = "flex";
+    sosMsg.style.display = "block";
+    sosMsg.innerHTML = `✨ <strong>描紅浮水印已開啟！</strong>跟著淡灰色筆畫描寫看看。`;
+  } else if (level === 3) {
+    confirmWriteSuccess(true);
+  }
+}
+
+function isCanvasBlank() {
+  const pixelBuffer = new Uint32Array(
+    ctx.getImageData(0, 0, canvas.width, canvas.height).data.buffer
+  );
+  return !pixelBuffer.some(color => color !== 0);
+}
+
+function confirmWriteSuccess(forceReveal = false) {
+  if (!forceReveal && isCanvasBlank()) {
+    alert("⚠️ 請先在手寫板上練習寫出完整生字，再對答案喔！");
+    return;
+  }
+
+  const q = lessonsData[currentLesson].questions[currentQuestionIndex];
+  const revealBox = document.getElementById("revealBox");
+  revealBox.style.display = "block";
+
+  revealBox.innerHTML = `
+    <div style="padding: 6px 0;">
+      <div style="font-size: 1rem; color: #475569; margin-bottom: 6px; font-weight: 700;">請仔細對照你寫的部件與標準答案：</div>
+      <div style="font-size: 3.5rem; color: #4F46E5; font-weight: 900; margin: 4px 0;">【${q.target}】</div>
+      <div style="font-size: 1.05rem; color: #059669; font-weight: 700;">語詞：${q.pre}${q.target}${q.post}</div>
+      <div style="font-size: 0.9rem; color: #B45309; margin: 8px 0; background: #FEF3C7; padding: 6px 10px; border-radius: 8px;">
+        <strong>💡 口訣叮嚀：</strong>${q.memo}
+      </div>
+      
+      <div style="display: flex; gap: 12px; justify-content: center; margin-top: 14px;">
+        <button onclick="handleSelfCheckResult(false)" style="background: #EF4444; color: white; border: none; padding: 10px 18px; border-radius: 10px; font-weight: 800; cursor: pointer; font-size: 0.95rem;">
+          ❌ 寫錯了（重新寫）
+        </button>
+        <button onclick="handleSelfCheckResult(true)" style="background: #10B981; color: white; border: none; padding: 10px 18px; border-radius: 10px; font-weight: 800; cursor: pointer; font-size: 0.95rem;">
+          ⭕ 檢查無誤，完全正確！
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function handleSelfCheckResult(isCorrect) {
+  const feedbackBox = document.getElementById("feedbackBox");
+
+  if (isCorrect) {
+    if (usedSOSCount === 0) {
+      addExperience(35);
+      feedbackBox.className = "feedback-box correct";
+      feedbackBox.innerHTML = `<strong>太棒了！</strong> 零求救自主寫對生字，獲得 +35 EXP！`;
+    } else {
+      addExperience(20);
+      feedbackBox.className = "feedback-box correct";
+      feedbackBox.innerHTML = `<strong>完成練習！</strong> 確實核對並掌握正確生字，獲得 +20 EXP！`;
+    }
+    feedbackBox.style.display = "block";
+    showNextButton();
+  } else {
+    feedbackBox.className = "feedback-box wrong";
+    feedbackBox.innerHTML = `
+      <strong>沒關係，發現錯誤學更快！</strong><br>
+      已為你開啟「淡灰描紅」，請觀察部件差異並在畫布上描寫一次喔！
+    `;
+    feedbackBox.style.display = "block";
+    document.getElementById("watermarkGuide").style.display = "flex";
+    clearCanvas();
+  }
+}
+
+function showNextButton() {
+  const nextBtn = document.getElementById("nextBtn");
+  const qList = lessonsData[currentLesson].questions;
+  nextBtn.textContent = (currentQuestionIndex === qList.length - 1) ? "本課完成！再練一次 🔄" : "下一題 ➜";
+  nextBtn.style.display = "block";
+}
+
+function nextQuestion() {
+  const qList = lessonsData[currentLesson].questions;
+  if (currentQuestionIndex < qList.length - 1) {
+    currentQuestionIndex++;
+    loadQuestion();
+  } else {
+    currentQuestionIndex = 0;
+    loadQuestion();
+  }
+}
+
+// 手寫畫布繪圖
+const canvas = document.getElementById("writeCanvas");
+const ctx = canvas.getContext("2d");
+let isDrawing = false;
+
+ctx.lineWidth = 6;
+ctx.lineCap = "round";
+ctx.lineJoin = "round";
+ctx.strokeStyle = "#1E293B";
+
+function getCanvasPos(e) {
+  const rect = canvas.getBoundingClientRect();
+  const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+  const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+  return {
+    x: clientX - rect.left,
+    y: clientY - rect.top
+  };
+}
+
+function startDraw(e) {
+  isDrawing = true;
+  const pos = getCanvasPos(e);
+  ctx.beginPath();
+  ctx.moveTo(pos.x, pos.y);
+  e.preventDefault();
+}
+
+function draw(e) {
+  if (!isDrawing) return;
+  const pos = getCanvasPos(e);
+  ctx.lineTo(pos.x, pos.y);
+  ctx.stroke();
+  e.preventDefault();
+}
+
+function stopDraw() {
+  isDrawing = false;
+}
+
+canvas.addEventListener("mousedown", startDraw);
+canvas.addEventListener("mousemove", draw);
+canvas.addEventListener("mouseup", stopDraw);
+canvas.addEventListener("mouseleave", stopDraw);
+
+canvas.addEventListener("touchstart", startDraw, { passive: false });
+canvas.addEventListener("touchmove", draw, { passive: false });
+canvas.addEventListener("touchend", stopDraw);
+
+function clearCanvas() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+window.onload = () => {
+  initLessonSelect();
+  updateExpUI();
+  changeLesson(1);
+};
+</script>
+</body>
+</html>
